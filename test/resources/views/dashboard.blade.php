@@ -29,7 +29,7 @@
                 <p class="text-sm mb-6">
                     Elke week organiseren we leuke en uitdagende activiteiten zoals spellen, kampen en uitstapjes.
                 </p>
-                <a href="{{ route('activities.index') }}" class="inline-block bg-white text-indigo-600 font-medium py-2 px-4 rounded shadow hover:bg-gray-200">
+                <a href="{{ route('activities.index') }}" class="inline-block bg-orange-600 text-white font-medium py-2 px-4 rounded shadow hover:bg-orange-700">
                     Lees meer →
                 </a>
                 <div class="flex mt-4">
@@ -50,7 +50,7 @@
         <p class="text-sm mb-6">
             Blijf op de hoogte van al onze evenementen en mededelingen.
         </p>
-        <a href="{{ route('news.index') }}" class="inline-block bg-white text-green-600 font-medium py-2 px-4 rounded shadow hover:bg-gray-200">
+        <a href="{{ route('news.index') }}" class="inline-block bg-orange-600 text-white font-medium py-2 px-4 rounded shadow hover:bg-orange-700">
             Lees meer →
         </a>
         <div class="flex mt-4">
@@ -61,19 +61,19 @@
             
 
 
-            <!-- Lid worden -->
+            <!-- FAQ -->
             <div class="p-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg shadow-lg text-white">
                 <div class="flex items-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 00-8 0m8 0a4 4 0 01-8 0m8 0v1m0 2v2a2 2 0 002 2h2a2 2 0 002-2v-2m-4-2a4 4 0 11-8 0m0 0a4 4 0 008 0z" />
-                    </svg>
-                    <h2 class="text-2xl font-bold">Word Lid</h2>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m0 0H7m1 0h8m0 0h1m-1 0H8m0 0v-4m0 8v4m-3-3h16" />
+                </svg>
+                    <h2 class="text-2xl font-bold">FAQ</h2>
                 </div>
                 <p class="text-sm mb-6">
-                    Word deel van onze jeugdbeweging en ervaar een leven vol avontuur.
+                    Vragen? Aarzel niet en stel all je vragen in onze FAQ sectie!
                 </p>
-                <a href="{{ route('contact.show') }}" class="inline-block bg-white text-orange-600 font-medium py-2 px-4 rounded shadow hover:bg-gray-200">
-                    Contacteer ons →
+                <a href="{{ route('faq') }}" class="inline-block bg-orange-600 text-white font-medium py-2 px-4 rounded shadow hover:bg-orange-700">
+                   FAQ →
                 </a>
             </div>
         </div>

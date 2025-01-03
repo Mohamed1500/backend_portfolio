@@ -14,18 +14,15 @@ return new class extends Migration
         Schema::create('faqs', function (Blueprint $table) {
             $table->id();
             $table->string('question');
-            $table->text('description')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->text('answer');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->text('answer');
             $table->unsignedBigInteger('faq_id');
             $table->unsignedBigInteger('user_id');
+            $table->text('content');
             $table->timestamps();
 
             $table->foreign('faq_id')->references('id')->on('faqs')->onDelete('cascade');
