@@ -2,47 +2,39 @@
 
 namespace App\Http\Controllers;
 
-    use App\Http\Requests\ProfileUpdateRequest;
-    use Illuminate\Http\RedirectResponse;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
-    use Illuminate\Support\Facades\Redirect;
-    use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
-    class ProfileController extends Controller
+class ProfileController extends Controller
+{
+    public function edit()
     {
-        /**
-         * Display the user's profile form.
-         */
-        public function edit(Request $request): View
-        {
-            return view('profile.edit', [
-                'user' => $request->user(),
-            ]);
-        }
-
-        /**
-         * Update the user's profile information.
-         */
-        public function update(ProfileUpdateRequest $request): RedirectResponse
-        {
-            $user = $request->user();
-
-            // Validate and upload the profile picture
-            if ($request->hasFile('profile_picture')) {
-                $request->validate([
-                    'profile_picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                ]);
-
-                $imageName = time().'.'.$request->profile_picture->extension();  
-                $request->profile_picture->storeAs('public/profile_pictures', $imageName);
-                $user->profile_picture = 'profile_pictures/' . $imageName;
-            }
-
-            // Update other profile information
-            $user->fill($request->validated());
-            $user->save();
-
-            return Redirect::route('profile.edit')->with('status', 'profile-updated');
-        }
+        return view('profile.edit', [
+            'user' => Auth::user(),
+        ]);
     }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
+            'birthdate' => ['required', 'date'],
+            'password' => ['nullable', 'confirmed', 'min:8'],
+        ]);
+
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->birthdate = $request->birthdate;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('profile.edit')->with('status', 'profile-updated');
+    }
+}

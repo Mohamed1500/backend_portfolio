@@ -72,7 +72,7 @@
                 <p class="text-sm mb-6">
                     Vragen? Aarzel niet en stel all je vragen in onze FAQ sectie!
                 </p>
-                <a href="{{ route('faq') }}" class="inline-block bg-orange-600 text-white font-medium py-2 px-4 rounded shadow hover:bg-orange-700">
+                <a href="{{ route('faq.index') }}" class="inline-block bg-orange-600 text-white font-medium py-2 px-4 rounded shadow hover:bg-orange-700">
                    FAQ →
                 </a>
             </div>

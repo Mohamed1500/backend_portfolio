@@ -8,21 +8,8 @@
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
-    @if ($user->profile_picture)
-    <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profielfoto" class="rounded-full w-32 h-32">
-@endif
-    <div>
-    <x-input-label for="profile_picture" :value="__('Profile Picture')" />
-    <x-text-input id="profile_picture" name="profile_picture" type="file" class="mt-1 block w-full" />
-    <x-input-error class="mt-2" :messages="$errors->get('profile_picture')" />
-</div>
 
-
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-        @csrf
-    </form>
-
-    <form method="post" action="{{ route('profile.update') }}"  class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
@@ -54,6 +41,13 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <!-- Birthdate -->
+        <div>
+            <x-input-label for="birthdate" :value="__('Birthdate')" />
+            <x-text-input id="birthdate" name="birthdate" type="date" class="mt-1 block w-full" :value="old('birthdate', $user->birthdate)" required />
+            <x-input-error class="mt-2" :messages="$errors->get('birthdate')" />
         </div>
 
         <div class="flex items-center gap-4">

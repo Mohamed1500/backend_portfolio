@@ -18,6 +18,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 Route::post('/faq/messages', [MessageController::class, 'store'])->name('messages.store');
+Route::patch('/faq/messages/{id}', [MessageController::class, 'update'])->name('messages.update');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
