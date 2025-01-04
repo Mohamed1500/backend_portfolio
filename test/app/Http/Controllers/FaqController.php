@@ -22,6 +22,26 @@ class FaqController extends Controller
                 })->get();
         }
 
-        return view('faq', compact('messages', 'category'));
+        return view('faq.faq', compact('messages', 'category'));
+    }
+
+    public function showAnswerForm($id)
+    {
+        $message = Message::findOrFail($id);
+        return view('faq.answer', compact('message'));
+    }
+
+    public function answer(Request $request, $id)
+    {
+        $request->validate([
+            'answer' => 'required|string',
+        ]);
+
+        $message = Message::findOrFail($id);
+        $message->answer = $request->input('answer');
+        $message->is_visible = true; // Maak het bericht zichtbaar zodra er een antwoord is
+        $message->save();
+
+        return redirect()->route('faq.index')->with('success', 'Answer added successfully.');
     }
 }
