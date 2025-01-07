@@ -32,7 +32,7 @@
 
                         <div class="mt-4">
                             <x-input-label for="message" :value="__('Message')" />
-                            <textarea id="message" name="message" class="mt-1 block w-full" rows="5" required>{{ old('message') }}</textarea>
+                            <textarea id="message" name="message" class="mt-1 block w-full" rows="5" required style= "color: black;">{{ old('message') }}</textarea>
                             <x-input-error class="mt-2" :messages="$errors->get('message')" />
                         </div>
 

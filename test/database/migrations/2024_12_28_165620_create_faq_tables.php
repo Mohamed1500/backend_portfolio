@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('faqs', function (Blueprint $table) {
             $table->id();
             $table->string('question');
-            $table->text('answer');
+            $table->text('answer')->nullable();
             $table->timestamps();
         });
 
@@ -28,6 +28,15 @@ return new class extends Migration
             $table->foreign('faq_id')->references('id')->on('faqs')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+
+        Schema::create('messages', function (Blueprint $table) {
+            $table->id();
+            $table->text('content');
+            $table->text('answer')->nullable();
+            $table->boolean('is_visible')->default(true);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -37,5 +46,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('answers');
         Schema::dropIfExists('faqs');
+        Schema::dropIfExists('messages');
     }
 };

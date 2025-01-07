@@ -22,11 +22,11 @@ class ContactController extends Controller
 
         // Verwerk het contactformulier (bijv. stuur een e-mail)
         Mail::send('emails.contact', [
-            'name' => $request->name,
-            'email' => $request->email,
-            'message' => $request->message,
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'message' => $request->input('message'),
         ], function ($mail) use ($request) {
-            $mail->from($request->email, $request->name);
+            $mail->from($request->input('email'), $request->input('name'));
             $mail->to('your-email@example.com')->subject('Contact Form Submission');
         });
 

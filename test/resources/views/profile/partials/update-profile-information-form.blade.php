@@ -44,10 +44,17 @@
         </div>
 
         <div>
-            <x-input-label for="birthdate" :value="__('Birthdate')" />
-            <x-text-input id="birthdate" name="birthdate" type="date" class="mt-1 block w-full" :value="old('birthdate', $user->birthdate)" required />
-            <x-input-error class="mt-2" :messages="$errors->get('birthdate')" />
-        </div>
+    <x-input-label for="birthdate" :value="__('Birthdate')" />
+    <x-text-input 
+        id="birthdate" 
+        name="birthdate" 
+        type="date" 
+        class="mt-1 block w-full" 
+        :value="old('birthdate', $user->birthdate ? $user->birthdate->toDateString() : '')" 
+        required 
+    />
+    <x-input-error class="mt-2" :messages="$errors->get('birthdate')" />
+</div>
 
         <div>
             <x-input-label for="username" :value="__('Username')" />
@@ -60,7 +67,9 @@
             <x-text-input id="profile_picture" name="profile_picture" type="file" class="mt-1 block w-full" />
             <x-input-error class="mt-2" :messages="$errors->get('profile_picture')" />
             @if ($user->profile_picture)
-                <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="mt-4 w-32 h-32 rounded-full">
+            <img src="{{ asset('storage/profile_pictures/' . $user->profile_picture) }}" 
+         alt="Profile Picture" 
+         class="w-20 h-20 rounded-full mt-4">
             @endif
         </div>
 

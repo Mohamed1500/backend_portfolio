@@ -4,35 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
     public function edit()
     {
-        return view('profile.edit', [
-            'user' => Auth::user(),
-        ]);
+        return view('profile.edit', ['user' => Auth::user()]);
     }
 
     public function update(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
-            'birthdate' => ['required', 'date'],
-            'username' => ['nullable', 'string', 'max:255'],
-            'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
-            'about_me' => ['nullable', 'string'],
-            'password' => ['nullable', 'confirmed', 'min:8'],
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'about_me' => 'nullable|string',
+            'profile_picture' => 'nullable|image|max:2048',
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
         $user = Auth::user();
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->birthdate = $request->birthdate;
-        $user->username = $request->username;
         $user->about_me = $request->about_me;
 
         if ($request->hasFile('profile_picture')) {
@@ -42,8 +36,10 @@ class ProfileController extends Controller
             }
 
             // Store the new profile picture
-            $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
-            $user->profile_picture = $profilePicturePath;
+            $imageName = uniqid().'.'.$request->profile_picture->extension();
+            $request->profile_picture->storeAs('profile_pictures', $imageName, 'public');
+            $user->profile_picture = $imageName;
+            
         }
 
         if ($request->filled('password')) {
@@ -53,5 +49,37 @@ class ProfileController extends Controller
         $user->save();
 
         return redirect()->route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function editBirthdate()
+    {
+        return view('profile.edit-birthdate', ['user' => Auth::user()]);
+    }
+
+    public function updateBirthdate(Request $request)
+    {
+        $request->validate([
+            'birthdate' => 'required|date',
+        ]);
+
+        $user = Auth::user();
+        $user->birthdate = $request->birthdate;
+        $user->save();
+
+        return redirect()->route('profile.edit')->with('success', 'Birthdate updated successfully.');
+    }
+
+    public function destroy(Request $request)
+    {
+        $user = Auth::user();
+        $user->delete();
+
+        return redirect()->route('home');
+    }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return view('profile.show', compact('user'));
     }
 }

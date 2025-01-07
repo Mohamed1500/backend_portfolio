@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->text('content');
+            $table->text('answer')->nullable();
+            $table->boolean('is_visible')->default(true);
+            $table->string('category'); // Voeg dit veld toe om de categorie op te slaan
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

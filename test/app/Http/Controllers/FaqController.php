@@ -4,26 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Message;
-use Illuminate\Support\Facades\Auth;
 
 class FaqController extends Controller
 {
     public function index(Request $request)
-    {
-        $category = $request->input('category');
-        if (Auth::check() && Auth::user()->is_admin) {
-            $messages = Message::when($category, function ($query, $category) {
-                return $query->where('category', $category);
-            })->get();
-        } else {
-            $messages = Message::where('is_visible', true)
-                ->when($category, function ($query, $category) {
-                    return $query->where('category', $category);
-                })->get();
-        }
+{
+    $query = Message::query();
 
-        return view('faq.faq', compact('messages', 'category'));
+    if ($request->has('search_category') && $request->search_category != '') {
+        $query->where('category', $request->search_category);
     }
+
+    // Controleer of de gebruiker ingelogd is en geen admin is
+    if (!auth()->check() || !auth()->user()->is_admin) {
+        // Alleen berichten met een antwoord van een admin tonen
+        $query->whereNotNull('answer')->whereHas('user', function ($q) {
+            $q->where('is_admin', true); // Controleer dat het antwoord door een admin is gegeven
+        });
+    }
+
+    $messages = $query->get();
+
+    return view('faq.faq', compact('messages'));
+}
+
 
     public function showAnswerForm($id)
     {
@@ -39,9 +43,8 @@ class FaqController extends Controller
 
         $message = Message::findOrFail($id);
         $message->answer = $request->input('answer');
-        $message->is_visible = true; // Maak het bericht zichtbaar zodra er een antwoord is
         $message->save();
 
-        return redirect()->route('faq.index')->with('success', 'Answer added successfully.');
+        return redirect()->route('faq.index')->with('success', 'Antwoord succesvol toegevoegd.');
     }
 }
