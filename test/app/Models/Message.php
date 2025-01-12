@@ -16,10 +16,16 @@ class Message extends Model
         'is_visible',
         'category', 
         'user_id',
+        'answer_user_id',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function answerUser()
+    {
+        return $this->belongsTo(User::class, 'answer_user_id');
     }
 }

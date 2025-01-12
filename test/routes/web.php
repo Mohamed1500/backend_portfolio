@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     // Routes voor nieuwsberichten
     Route::get('/news/create', [NewsController::class, 'create'])->name('news.create');
     Route::post('/news', [NewsController::class, 'store'])->name('news.store');
+
+    Route::post('/admin/users', [ProfileController::class, 'storeUser'])->name('admin.users.store');
 });
 
 Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');

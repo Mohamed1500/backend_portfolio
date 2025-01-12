@@ -74,7 +74,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $user->delete();
 
-        return redirect()->route('home');
+        return redirect()->route('welcome');
     }
 
     public function show($id)
@@ -82,4 +82,30 @@ class ProfileController extends Controller
         $user = User::findOrFail($id);
         return view('profile.show', compact('user'));
     }
+    public function storeUser(Request $request)
+{
+    if (!Auth::user()->is_admin) {
+        abort(403, 'Unauthorized');
+    }
+
+    
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'is_admin' => 'nullable|boolean',
+    ]);
+
+    
+    User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+        'is_admin' => $request->input('is_admin') == "1",
+    ]);
+
+    
+    return redirect()->back()->with('success', 'User created successfully.');
+}
+
 }

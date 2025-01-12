@@ -4,30 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Message;
+use Illuminate\Support\Facades\Auth;
 
 class FaqController extends Controller
 {
     public function index(Request $request)
-{
-    $query = Message::query();
+    {
+        $query = Message::query();
 
-    if ($request->has('search_category') && $request->search_category != '') {
-        $query->where('category', $request->search_category);
+        if ($request->has('search_category') && $request->search_category != '') {
+            $query->where('category', $request->search_category);
+        }
+
+        // Controleer of de gebruiker ingelogd is en geen admin is
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            // Alleen berichten met een antwoord van een admin tonen
+            $query->whereNotNull('answer')->whereHas('user', function ($q) {
+                $q->where('is_admin', true); // Controleer dat het antwoord door een admin is gegeven
+            });
+        }
+
+        $messages = $query->get();
+
+        return view('faq.faq', compact('messages'));
     }
-
-    // Controleer of de gebruiker ingelogd is en geen admin is
-    if (!auth()->check() || !auth()->user()->is_admin) {
-        // Alleen berichten met een antwoord van een admin tonen
-        $query->whereNotNull('answer')->whereHas('user', function ($q) {
-            $q->where('is_admin', true); // Controleer dat het antwoord door een admin is gegeven
-        });
-    }
-
-    $messages = $query->get();
-
-    return view('faq.faq', compact('messages'));
-}
-
 
     public function showAnswerForm($id)
     {
@@ -42,7 +42,10 @@ class FaqController extends Controller
         ]);
 
         $message = Message::findOrFail($id);
-        $message->answer = $request->input('answer');
+        $message->answer = $request->answer;
+        $message->answer_user_id = Auth::id();
+        \Log::info('Answer User ID: ' . Auth::id());
+
         $message->save();
 
         return redirect()->route('faq.index')->with('success', 'Antwoord succesvol toegevoegd.');
