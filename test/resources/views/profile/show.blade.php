@@ -35,9 +35,20 @@
                             {{ $user->birthdate ? $user->birthdate->format('d-m-Y') : 'Niet beschikbaar' }}
                         </p>
                     </div>
+
+                    @if (Auth::user()->is_admin)
+                        <div class="mt-6">
+                            <form method="POST" action="{{ route('profile.upgrade', $user->id) }}">
+                                @csrf
+                                @method('PATCH')
+                                <x-primary-button>
+                                    {{ __('Upgrade naar Admin') }}
+                                </x-primary-button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-    
 </x-app-layout>

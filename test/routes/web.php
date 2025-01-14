@@ -34,15 +34,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/change-birthdate', [ProfileController::class, 'editBirthdate'])->name('profile.editBirthdate');
     Route::patch('/profile/change-birthdate', [ProfileController::class, 'updateBirthdate'])->name('profile.updateBirthdate');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::patch('/profile/{id}/upgrade', [ProfileController::class, 'upgradeToAdmin'])->name('profile.upgrade');
     
     // Routes voor nieuwsberichten
     Route::get('/news/create', [NewsController::class, 'create'])->name('news.create');
     Route::post('/news', [NewsController::class, 'store'])->name('news.store');
+    Route::post('/news/{id}/comments', [NewsController::class, 'storeComment'])->name('news.comment.store');
+    Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
 
     Route::post('/admin/users', [ProfileController::class, 'storeUser'])->name('admin.users.store');
 });
 
 Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+Route::get('/activities/create', [ActivityController::class, 'create'])->name('activities.create');
+Route::post('/activities', [ActivityController::class, 'store'])->name('activities.store');
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
 

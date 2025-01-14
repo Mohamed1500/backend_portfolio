@@ -9,25 +9,25 @@ use Illuminate\Support\Facades\Auth;
 class FaqController extends Controller
 {
     public function index(Request $request)
-    {
-        $query = Message::query();
+{
+    $query = Message::query();
 
-        if ($request->has('search_category') && $request->search_category != '') {
-            $query->where('category', $request->search_category);
-        }
-
-        // Controleer of de gebruiker ingelogd is en geen admin is
-        if (!auth()->check() || !auth()->user()->is_admin) {
-            // Alleen berichten met een antwoord van een admin tonen
-            $query->whereNotNull('answer')->whereHas('user', function ($q) {
-                $q->where('is_admin', true); // Controleer dat het antwoord door een admin is gegeven
-            });
-        }
-
-        $messages = $query->get();
-
-        return view('faq.faq', compact('messages'));
+    // Filter op categorie als dit is opgegeven in de zoekopdracht
+    if ($request->has('search_category') && $request->search_category != '') {
+        $query->where('category', $request->search_category);
     }
+
+    // Alleen berichten met een antwoord tonen als de gebruiker geen admin is
+    if (!auth()->check() || !auth()->user()->is_admin) {
+        $query->whereNotNull('answer'); // Toon alleen berichten die beantwoord zijn
+    }
+
+    // Verkrijg berichten uit de database
+    $messages = $query->get();
+
+    // Geef de berichten weer in de FAQ-pagina
+    return view('faq.faq', compact('messages'));
+}
 
     public function showAnswerForm($id)
     {

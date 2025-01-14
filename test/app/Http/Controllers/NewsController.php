@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\NewsItem;
+use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
@@ -33,16 +35,36 @@ class NewsController extends Controller
             'content' => 'required|string',
         ]);
 
-        $imagePath = $request->file('image')->store('news_images', 'public');
+        $newsItem = new NewsItem();
+        $newsItem->title = $request->title;
+        $newsItem->image = $request->file('image')->store('news_images', 'public');
+        $newsItem->content = $request->content;
+        $newsItem->user_id = Auth::id();
+        $newsItem->published_at = now();
+        $newsItem->save();
 
-        NewsItem::create([
-            'title' => $request->input('title'),
-            'image' => $imagePath,
-            'content' => $request->input('content'),
-            'published_at' => now(),
-            'user_id' => auth()->id(),
+        return redirect()->route('news.index')->with('success', 'News item created successfully.');
+    }
+
+    public function storeComment(Request $request, $id)
+    {
+        $request->validate([
+            'content' => 'required|string',
         ]);
 
-        return redirect()->route('news.index')->with('success', 'Nieuwsbericht succesvol geplaatst.');
+        $comment = new Comment();
+        $comment->news_item_id = $id;
+        $comment->user_id = Auth::id();
+        $comment->content = $request->content;
+        $comment->save();
+
+        return redirect()->route('news.show', $id)->with('success', 'Comment added successfully.');
+    }
+    public function destroy($id)
+    {
+        $newsItem = NewsItem::findOrFail($id);
+        $newsItem->delete();
+
+        return redirect()->route('news.index')->with('success', 'News item deleted successfully.');
     }
 }

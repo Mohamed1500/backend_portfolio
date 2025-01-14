@@ -20,4 +20,9 @@ class NewsItem extends Model
     protected $dates = [
         'published_at',
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

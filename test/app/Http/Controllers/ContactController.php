@@ -20,16 +20,25 @@ class ContactController extends Controller
             'message' => 'required|string',
         ]);
 
-        // Verwerk het contactformulier (bijv. stuur een e-mail)
+        
         Mail::send('emails.contact', [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'message' => $request->input('message'),
+            'messageContent' => $request->input('message'),
         ], function ($mail) use ($request) {
             $mail->from($request->input('email'), $request->input('name'));
-            $mail->to('your-email@example.com')->subject('Contact Form Submission');
+            $mail->to('mohamed.machmache@student.ehb.be')->subject('Contact Form Submission');
         });
 
         return redirect()->route('contact.create')->with('success', 'Your message has been sent successfully!');
     }
+    public function testEmail()
+{
+    Mail::raw('This is a test email from Laravel.', function ($message) {
+        $message->to('admin@example.com')
+                ->subject('Test Email');
+    });
+
+    return 'Test email sent!';
+}
 }

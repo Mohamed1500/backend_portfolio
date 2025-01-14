@@ -53,7 +53,7 @@
                                             <a href="{{ route('profile.show', $message->answerUser->id) }}" class="bg-indigo-600 text-white px-4 py-2 rounded shadow hover:bg-indigo-800">
                                                 {{ __('Zie profiel van beantwoorder') }}
                                             </a>
-                                        @endif
+                                            @endif
                                     </div>
                                     @if (Auth::check() && Auth::user()->is_admin)
                                         <div class="flex items-center">

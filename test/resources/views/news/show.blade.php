@@ -17,6 +17,33 @@
                         {{ $newsItem->content }}
                     </p>
                     <a href="{{ route('news.index') }}" class="text-indigo-600 hover:text-indigo-800 font-medium">Terug naar nieuws</a>
+
+                    <div class="mt-6">
+                        <h4 class="text-xl font-bold">Comments</h4>
+                        @foreach ($newsItem->comments as $comment)
+                            <div class="mt-4">
+                                <p><strong>{{ $comment->user->name }}:</strong> {{ $comment->content }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    @auth
+                        <div class="mt-6">
+                            <form method="POST" action="{{ route('news.comment.store', $newsItem->id) }}">
+                                @csrf
+                                <div>
+                                    <x-input-label for="content" :value="__('Comment')" />
+                                    <textarea style='color:black' id="content" name="content" class="mt-1 block w-full" rows="4" required></textarea>
+                                    <x-input-error :messages="$errors->get('content')" class="mt-2" />
+                                </div>
+                                <div class="mt-4">
+                                    <x-primary-button>
+                                        {{ __('Add Comment') }}
+                                    </x-primary-button>
+                                </div>
+                            </form>
+                        </div>
+                    @endauth
                 </div>
             </div>
         </div>
