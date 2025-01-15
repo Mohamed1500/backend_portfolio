@@ -20,9 +20,14 @@
                                 <span class="text-gray-700">Geen foto</span>
                             </div>
                         @endif
+
                         <div>
                             <h3 class="text-xl font-bold">{{ $user->name }}</h3>
-                            <p class="text-gray-400">{{ $user->email }}</p>
+                            
+                            {{-- Alleen tonen als de gebruiker is ingelogd --}}
+                            @auth
+                                <p class="text-gray-400">{{ $user->email }}</p>
+                            @endauth
                         </div>
                     </div>
 
@@ -36,17 +41,43 @@
                         </p>
                     </div>
 
-                    @if (Auth::user()->is_admin)
-                        <div class="mt-6">
-                            <form method="POST" action="{{ route('profile.upgrade', $user->id) }}">
-                                @csrf
-                                @method('PATCH')
-                                <x-primary-button>
-                                    {{ __('Upgrade naar Admin') }}
-                                </x-primary-button>
-                            </form>
-                        </div>
-                    @endif
+                    {{-- Knop om profiel te bewerken, alleen voor eigen profiel --}}
+                    @auth
+                        @if (Auth::id() === $user->id)
+                            <div class="mt-6">
+                                <a href="{{ route('profile.edit') }}" class="text-blue-500 hover:underline">
+                                    {{ __('Bewerk je profiel') }}
+                                </a>
+                            </div>
+                        @endif
+                    @endauth
+
+                    {{-- Admin-acties, alleen voor admins --}}
+                    @auth
+                        @if (Auth::user()->is_admin)
+                            <div class="mt-6">
+                                @if (!$user->is_admin)
+                                    {{-- Knop om gebruiker te upgraden naar admin --}}
+                                    <form method="POST" action="{{ route('profile.upgrade', $user->id) }}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <x-primary-button>
+                                            {{ __('Upgrade naar Admin') }}
+                                        </x-primary-button>
+                                    </form>
+                                @else
+                                    {{-- Knop om admin te degraderen naar gebruiker --}}
+                                    <form method="POST" action="{{ route('profile.downgrade', $user->id) }}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <x-danger-button>
+                                            {{ __('Degradeer naar Gebruiker') }}
+                                        </x-danger-button>
+                                    </form>
+                                @endif
+                            </div>
+                        @endif
+                    @endauth
                 </div>
             </div>
         </div>

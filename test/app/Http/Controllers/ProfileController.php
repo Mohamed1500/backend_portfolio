@@ -59,10 +59,16 @@ class ProfileController extends Controller
     }
 
     public function show($id)
-    {
-        $user = User::findOrFail($id);
-        return view('profile.show', compact('user'));
+{
+    $user = User::findOrFail($id);
+
+    // Voorkom dat niet-bestaande gebruikersprofielen worden getoond
+    if (!$user) {
+        abort(404, 'Gebruiker niet gevonden.');
     }
+
+    return view('profile.show', compact('user'));
+}
 
     public function storeUser(Request $request)
     {
@@ -94,5 +100,18 @@ class ProfileController extends Controller
         $user->save();
 
         return redirect()->route('profile.show', $user->id)->with('success', 'User upgraded to admin successfully.');
+    }
+    public function downgradeToUser($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->id === Auth::id()) {
+            return redirect()->route('profile.show', $user->id)->with('error', 'Je kunt jezelf niet degraderen.');
+        }
+
+        $user->is_admin = false;
+        $user->save();
+
+        return redirect()->route('profile.show', $user->id)->with('success', 'Admin gedegradeerd naar gebruiker.');
     }
 }

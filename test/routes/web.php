@@ -33,8 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/change-birthdate', [ProfileController::class, 'editBirthdate'])->name('profile.editBirthdate');
     Route::patch('/profile/change-birthdate', [ProfileController::class, 'updateBirthdate'])->name('profile.updateBirthdate');
-    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::patch('/profile/{id}/upgrade', [ProfileController::class, 'upgradeToAdmin'])->name('profile.upgrade');
+    Route::patch('/profile/{id}/downgrade', [ProfileController::class, 'downgradeToUser'])->name('profile.downgrade');
     
     // Routes voor nieuwsberichten
     Route::get('/news/create', [NewsController::class, 'create'])->name('news.create');
@@ -48,10 +48,13 @@ Route::middleware('auth')->group(function () {
 Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
 Route::get('/activities/create', [ActivityController::class, 'create'])->name('activities.create');
 Route::post('/activities', [ActivityController::class, 'store'])->name('activities.store');
+
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
 
 require __DIR__.'/auth.php';
