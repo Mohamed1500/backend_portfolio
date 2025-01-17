@@ -1,66 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+### 1. Vereisten
+Zorg ervoor dat de volgende software geïnstalleerd is:
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+- PHP >= 8.0
+- Composer
+- MySQL (of een andere database zoals SQLite of PostgreSQL)
+- Laravel >= 9.x
 
-## About Laravel
+### 2. Installeer het project
+Volg de onderstaande stappen om het project te installeren en in te stellen:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. **Clone het project**:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+   git clone <repository_url>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+2. **Navigeer naar de projectmap**:
+   cd <backend_portfolio>
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. **Installeer de afhankelijkheden met Composer**:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+   composer install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 3. Configuratie
 
-## Laravel Sponsors
+1. **Maak een kopie van het `.env.example` bestand en noem het `.env`**:
+   cp .env.example .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Stel de database-instellingen in het `.env` bestand in**:
 
-### Premium Partners
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=backend
+   DB_USERNAME=root
+   DB_PASSWORD=PikaVolt2005
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
 
-## Contributing
+### 4. Migraties en Seeders
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Voer de migraties uit**:
+   Dit maakt de benodigde tabellen aan in de database.
 
-## Code of Conduct
+   php artisan migrate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+2. **Voer de seeders uit om testgegevens in te voeren**:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   php artisan db:seed
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Start de Laravel Server
+
+php artisan serve
+
+Bezoek [http://localhost:8000](http://localhost:8000) in je browser.
+
+### 6. Gebruikers en Admin Toegang
+
+- **Testgebruiker**:
+  - E-mail: `user@ehb.com`
+  - Wachtwoord: `password`
+
+- **Admingebruiker**:
+  - E-mail: `admin@ehb.be`
+  - Wachtwoord: `Password!321`
+
+Na inloggen kan de admin nieuws en activiteiten beheren, evenals gebruikersprofielen.
+
+### 7. Routes en Functionaliteit
+
+De applicatie bevat de volgende routes en functionaliteiten:
+
+- **Dashboard**: Toegankelijk voor alle ingelogde gebruikers.
+- **Nieuws**: Gebruikers kunnen nieuwsitems bekijken. Alleen admins kunnen nieuws toevoegen of verwijderen.
+- **Activiteiten**: Gebruikers kunnen activiteiten bekijken en, indien ingelogd, nieuwe activiteiten aanmaken.
+- **Profiel**: Gebruikers kunnen hun profiel bewerken, inclusief hun geboortedatum en andere gegevens.
+
+### 8. Standaard Functies
+
+- **Nieuwsitems**: Gebruikers kunnen nieuwsitems bekijken en toevoegen.
+- **Activiteiten**: Gebruikers kunnen activiteiten bekijken en toevoegen.
+- **Profielpagina**: Gebruikers kunnen hun profiel bewerken, waaronder hun naam en e-mailadres.
+
+### 9. Belangrijke Bestanden
+
+- **`routes/web.php`**: Bevat de routeconfiguratie van de applicatie.
+- **`app/Models`**: Bevat de modelbestanden voor gebruikers, nieuwsitems, activiteiten, etc.
+- **`resources/views`**: Bevat de weergaven voor de front-end van de applicatie.
+
+### 10. Bronvermeldingen
+
+
+https://www.youtube.com/watch?v=bvi37IbJXS4 
+ 
+https://chatgpt.com (wegens photo's kan ik de chat niet delen)
+
+Mailtrap.io 
