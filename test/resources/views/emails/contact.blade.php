@@ -9,4 +9,4 @@
     <p><strong>Email:</strong> {{ $email }}</p>
     <p><strong>Bericht:</strong> {{ $messageContent }}</p>
 </body>
-</html>
+</html> 

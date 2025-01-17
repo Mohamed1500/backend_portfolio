@@ -53,7 +53,7 @@
                                             <a href="{{ route('profile.show', $message->answerUser->id) }}" class="bg-indigo-600 text-white px-4 py-2 rounded shadow hover:bg-indigo-800">
                                                 {{ __('Zie profiel van beantwoorder') }}
                                             </a>
-                                            @endif
+                                        @endif
                                     </div>
                                     @if (Auth::check() && Auth::user()->is_admin)
                                         <div class="flex items-center">
@@ -77,28 +77,37 @@
                     @endif
 
                     <h3 class="text-2xl font-bold mb-4 mt-8">Plaats een nieuw bericht</h3>
-                    <form method="POST" action="{{ route('messages.store') }}">
-                        @csrf
-                        <div>
-                            <x-input-label for="content" :value="__('Bericht')" class="text-black" />
-                            <textarea id="content" name="content" class="mt-1 block w-full text-black" rows="5" required>{{ old('content') }}</textarea>
-                            <x-input-error class="mt-2" :messages="$errors->get('content')" />
+                    @guest
+                        <div class="bg-red-500 text-white p-4 rounded mb-4">
+                            Je moet je inloggen om een bericht te plaatsen. 
+                            <a href="{{ route('register') }}" class="text-white underline">Registreer hier</a> om een account aan te maken.
                         </div>
-                        <div>
-                            <x-input-label for="category" :value="__('Categorie')" class="text-black" />
-                            <select id="category" name="category" class="mt-1 block w-full text-black" required>
-                                <option value="Algemeen">Algemeen</option>
-                                <option value="Technisch">Technisch</option>
-                                <option value="Overig">Overig</option>
-                            </select>
-                            <x-input-error class="mt-2" :messages="$errors->get('category')" />
-                        </div>
-                        <div class="flex items-center justify-end mt-4">
-                            <x-primary-button class="ml-4">
-                                {{ __('Verstuur') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
+                    @endguest
+
+                    @auth
+                        <form method="POST" action="{{ route('messages.store') }}">
+                            @csrf
+                            <div>
+                                <x-input-label for="content" :value="__('Bericht')" class="text-black" />
+                                <textarea id="content" name="content" class="mt-1 block w-full text-black" rows="5" required>{{ old('content') }}</textarea>
+                                <x-input-error class="mt-2" :messages="$errors->get('content')" />
+                            </div>
+                            <div>
+                                <x-input-label for="category" :value="__('Categorie')" class="text-black" />
+                                <select id="category" name="category" class="mt-1 block w-full text-black" required>
+                                    <option value="Algemeen">Algemeen</option>
+                                    <option value="Technisch">Technisch</option>
+                                    <option value="Overig">Overig</option>
+                                </select>
+                                <x-input-error class="mt-2" :messages="$errors->get('category')" />
+                            </div>
+                            <div class="flex items-center justify-end mt-4">
+                                <x-primary-button class="ml-4">
+                                    {{ __('Verstuur') }}
+                                </x-primary-button>
+                            </div>
+                        </form>
+                    @endauth
                 </div>
             </div>
         </div>

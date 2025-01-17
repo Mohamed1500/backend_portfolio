@@ -35,4 +35,12 @@ class ActivityController extends Controller
 
         return redirect()->route('activities.index')->with('success', 'Activiteit succesvol toegevoegd.');
     }
+    public function destroy($id)
+{
+    $activity = Activity::findOrFail($id);
+    $activity->delete();
+
+    return redirect()->route('activities.index')->with('success', 'Activiteit succesvol verwijderd.');
+}
+
 }

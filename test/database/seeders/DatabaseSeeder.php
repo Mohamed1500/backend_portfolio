@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'testuser',
+            'email' => 'user@ehb.com',
         ]);
 
         // Voeg een standaard admin gebruiker toe
@@ -26,6 +26,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@ehb.be',
             'password' => Hash::make('Password!321'), // Zorg ervoor dat je een veilig wachtwoord gebruikt
             'is_admin' => true, // Voeg een veld toe om de admin status aan te geven
+        ]);
+
+        // Voer andere seeders uit
+        $this->call([
+            MessageSeeder::class,
+            NewsSeeder::class,
+            ActivitySeeder::class,
         ]);
     }
 }
